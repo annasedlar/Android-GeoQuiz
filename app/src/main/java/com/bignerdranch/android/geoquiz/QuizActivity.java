@@ -22,6 +22,7 @@ public class QuizActivity extends AppCompatActivity {
     private static final String KEY_INDEX = "index";
     private static final int REQUEST_CODE_CHEAT = 0;
 
+
     private Button mTrueButton;
     private Button mFalseButton;
     private ImageButton mNextButton;
@@ -35,12 +36,12 @@ public class QuizActivity extends AppCompatActivity {
 
 
     private Question[] mQuestionBank = new Question[] {
-            new Question(R.string.question_australia, true),
-            new Question(R.string.question_oceans, true),
-            new Question(R.string.question_mideast, false),
-            new Question(R.string.question_africa, false),
-            new Question(R.string.question_americas, true),
-            new Question(R.string.question_asia, true),
+            new Question(R.string.question_australia, true, false),
+            new Question(R.string.question_oceans, true, false),
+            new Question(R.string.question_mideast, false, false),
+            new Question(R.string.question_africa, false, false),
+            new Question(R.string.question_americas, true, false),
+            new Question(R.string.question_asia, true, false),
     };
 
     private int mCurrentIndex = 0;
@@ -166,39 +167,47 @@ public class QuizActivity extends AppCompatActivity {
         Log.d(TAG, "onDestroy() called");
     }
 
-        private void updateQuestion() {
-            mAlreadyAnswered = false;
+    private void updateQuestion() {
+        mAlreadyAnswered = false;
 
-            int question = mQuestionBank[mCurrentIndex].getTextResId();
-            mQuestionTextView.setText(question);
+        int question = mQuestionBank[mCurrentIndex].getTextResId();
+        mQuestionTextView.setText(question);
+    }
+
+    private void checkAnswer(boolean userPressedTrue){
+        if (mAlreadyAnswered == true){
+            return;
         }
 
-        private void checkAnswer(boolean userPressedTrue){
-            if (mAlreadyAnswered == true){
-                return;
+        mAlreadyAnswered = true;
+        boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+
+        int messageResId = 0;
+
+        if (mIsCheater) {
+            messageResId = R.string.judgement_toast;
+        } else {
+
+            if(userPressedTrue == answerIsTrue) {
+                messageResId = R.string.correct_toast;
+                mCorrectTally = mCorrectTally+1;
+
             }
-
-            mAlreadyAnswered = true;
-            boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
-
-            int messageResId = 0;
-
-            if (mIsCheater) {
-                messageResId = R.string.judgement_toast;
-            } else {
-
-                if(userPressedTrue == answerIsTrue) {
-                    messageResId = R.string.correct_toast;
-                    mCorrectTally = mCorrectTally+1;
-
-                }
-                else {
-                    messageResId = R.string.incorrect_toast;
-                    mCorrectTally = mIncorrectTally+1;
-                }
+            else {
+                messageResId = R.string.incorrect_toast;
+                mCorrectTally = mIncorrectTally+1;
             }
+        }
 
-            Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
+                .show();
+
+        if (mCurrentIndex == 5) {
+            Log.d(TAG, "OUT OF QUESTIONS");
+            Toast.makeText(this, "You've seen ALL the Questions, you're done!", Toast.LENGTH_SHORT)
                     .show();
+            mNextButton.setClickable(false);
+            mPrevButton.setClickable(false);
         }
+    }
 }
