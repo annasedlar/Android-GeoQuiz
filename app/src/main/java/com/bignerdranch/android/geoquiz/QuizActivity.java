@@ -204,7 +204,7 @@ public class QuizActivity extends AppCompatActivity {
 
         if (mCurrentIndex == 5) {
             Log.d(TAG, "OUT OF QUESTIONS");
-            Toast.makeText(this, "You've seen ALL the Questions, you're done!", Toast.LENGTH_SHORT)
+            Toast.makeText(this, "You've seen ALL the Questions, you're done! You're score is " + mCorrectTally + " sout of 6", Toast.LENGTH_SHORT)
                     .show();
             mNextButton.setClickable(false);
             mPrevButton.setClickable(false);
