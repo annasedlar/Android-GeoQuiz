@@ -23,9 +23,12 @@ public class CheatActivity extends AppCompatActivity {
     private int mCurrentIndex = 0;
 
     private boolean mAnswerIsTrue;
+    private int mCheatCount;
+    private int mNewCheatCount;
     private TextView mAnswerTextView;
     private Button mShowAnswerButton;
     private TextView mApiLevelTextView;
+    private TextView mCheatCountTextView;
 
     public static Intent newIntent(Context packageContext, boolean answerIsTrue) {
         Intent intent = new Intent(packageContext, CheatActivity.class);
@@ -43,11 +46,15 @@ public class CheatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cheat);
 
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
+        mCheatCount = 3 - getIntent().getIntExtra("cheatCount", 0);
 
         mAnswerTextView = (TextView) findViewById(R.id.show_answer_button);
 
         mApiLevelTextView = (TextView) findViewById(R.id.android_SDK_version);
         mApiLevelTextView.setText("API LEVEL " + Build.VERSION.SDK_INT);
+
+        mCheatCountTextView = (TextView) findViewById(R.id.cheat_count);
+        mCheatCountTextView.setText("You have " + mCheatCount + " remaining");
 
 
         mShowAnswerButton = (Button) findViewById(R.id.show_answer_button);
@@ -77,6 +84,8 @@ public class CheatActivity extends AppCompatActivity {
                 } else {
                     mShowAnswerButton.setVisibility(View.INVISIBLE);
                 }
+                mNewCheatCount = mCheatCount - 1;
+                mCheatCountTextView.setText("You have " + mNewCheatCount + " remaining");
             }
         });
     }

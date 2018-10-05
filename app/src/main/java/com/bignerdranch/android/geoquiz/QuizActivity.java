@@ -31,7 +31,6 @@ public class QuizActivity extends AppCompatActivity {
     private TextView mQuestionTextView;
     private boolean mAlreadyAnswered;
     private int mCorrectTally;
-    private int mIncorrectTally;
     private boolean mIsCheater;
 
 
@@ -45,6 +44,7 @@ public class QuizActivity extends AppCompatActivity {
     };
 
     private int mCurrentIndex = 0;
+    private int mCheatCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +99,15 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+                int cheatCount = mCheatCount;
+
                 Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+
+//                Intent intent2 = new Intent(QuizActivity.this, CheatActivity.class);
+                intent.putExtra("cheatCount", cheatCount);
+
                 startActivityForResult(intent, REQUEST_CODE_CHEAT);
+
             }
         });
 
@@ -127,6 +134,7 @@ public class QuizActivity extends AppCompatActivity {
                 return;
             }
             mIsCheater = CheatActivity.wasAnswerShown(data);
+            mCheatCount = mCheatCount + 1;
         }
     }
 
@@ -195,7 +203,7 @@ public class QuizActivity extends AppCompatActivity {
             }
             else {
                 messageResId = R.string.incorrect_toast;
-                mCorrectTally = mIncorrectTally+1;
+                mCorrectTally = mCorrectTally+1;
             }
         }
 
