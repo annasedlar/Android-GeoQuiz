@@ -24,7 +24,7 @@ public class CheatActivity extends AppCompatActivity {
 
     private boolean mAnswerIsTrue;
     private int mCheatCount;
-    private int mNewCheatCount;
+    private int mNewCheatCount = 3;
     private TextView mAnswerTextView;
     private Button mShowAnswerButton;
     private TextView mApiLevelTextView;
@@ -58,6 +58,7 @@ public class CheatActivity extends AppCompatActivity {
 
 
         mShowAnswerButton = (Button) findViewById(R.id.show_answer_button);
+
         mShowAnswerButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -86,8 +87,14 @@ public class CheatActivity extends AppCompatActivity {
                 }
                 mNewCheatCount = mCheatCount - 1;
                 mCheatCountTextView.setText("You have " + mNewCheatCount + " remaining");
+
             }
         });
+
+
+        if (mCheatCount <= 0 ){
+            mShowAnswerButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
